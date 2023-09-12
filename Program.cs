@@ -12,6 +12,7 @@ builder.Services.AddDbContext<KalahariCollarV13AuthDbContext>(options => options
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<KalahariCollarV13AuthDbContext>();
 
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
