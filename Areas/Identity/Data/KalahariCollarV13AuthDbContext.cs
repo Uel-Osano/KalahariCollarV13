@@ -16,9 +16,12 @@ public class KalahariCollarV13AuthDbContext : IdentityDbContext<ApplicationUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        // Customize the ASP.NET Identity model and override the defaults if needed.
-        // For example, you can rename the ASP.NET Identity table names and more.
-        // Add your customizations after calling base.OnModelCreating(builder);
+
+        // Configure the one-to-many relationship between Owner and Pet
+        builder.Entity<ApplicationUser>()
+            .HasMany(o => o.Pets)  // An owner can have many pets
+            .WithOne(p => p.Owner) // Each pet has one owner
+            .HasForeignKey(p => p.OwnerId);
     }
 
     public DbSet<KalahariCollarV13.Models.Pet> Pet { get; set; } = default!;
