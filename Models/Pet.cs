@@ -1,4 +1,6 @@
-﻿namespace KalahariCollarV13.Models
+﻿using KalahariCollarV13.Areas.Identity.Data;
+
+namespace KalahariCollarV13.Models
 {
     public class Pet
     {
@@ -10,5 +12,7 @@
         public string OwnerId { get; set; }
         public string Location { get; set; } // Add the location property
                                              // Add other pet properties
+
+        public ApplicationUser Owner { get; set; }
     }
 }
