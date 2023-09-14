@@ -22,9 +22,8 @@ namespace KalahariCollarV13.Controllers
         // GET: Pets
         public async Task<IActionResult> Index()
         {
-              return _context.Pet != null ? 
-                          View(await _context.Pet.ToListAsync()) :
-                          Problem("Entity set 'KalahariCollarV13AuthDbContext.Pet'  is null.");
+            var kalahariCollarV13AuthDbContext = _context.Pet.Include(p => p.Owner);
+            return View(await kalahariCollarV13AuthDbContext.ToListAsync());
         }
 
         // GET: Pets/Details/5
@@ -36,6 +35,7 @@ namespace KalahariCollarV13.Controllers
             }
 
             var pet = await _context.Pet
+                .Include(p => p.Owner)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pet == null)
             {
@@ -48,6 +48,7 @@ namespace KalahariCollarV13.Controllers
         // GET: Pets/Create
         public IActionResult Create()
         {
+            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -64,6 +65,7 @@ namespace KalahariCollarV13.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", pet.OwnerId);
             return View(pet);
         }
 
@@ -80,6 +82,7 @@ namespace KalahariCollarV13.Controllers
             {
                 return NotFound();
             }
+            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", pet.OwnerId);
             return View(pet);
         }
 
@@ -115,6 +118,7 @@ namespace KalahariCollarV13.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", pet.OwnerId);
             return View(pet);
         }
 
@@ -127,6 +131,7 @@ namespace KalahariCollarV13.Controllers
             }
 
             var pet = await _context.Pet
+                .Include(p => p.Owner)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pet == null)
             {
@@ -150,14 +155,14 @@ namespace KalahariCollarV13.Controllers
             {
                 _context.Pet.Remove(pet);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PetExists(int id)
         {
-          return (_context.Pet?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Pet?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
